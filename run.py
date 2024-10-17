@@ -1,47 +1,35 @@
 import streamlit as st
 import spacy
-import subprocess
+from pubmed_NER import fetch_abstracts  # Assuming this is your previous code for fetching abstracts
 
-# Ensure the SpaCy model is installed if not already
-try:
-    nlp = spacy.load("en_core_web_sm")
-except OSError:
-    subprocess.run(["python", "-m", "spacy", "download", "en_core_web_sm"])
-    nlp = spacy.load("en_core_web_sm")
-
-from spacy import displacy
-
-# Custom colors for visualization (if needed)
-colors = {
-    "DISEASE": "linear-gradient(90deg, #aa9cfc, #fc9ce7)",
-    "CHEMICAL": "linear-gradient(90deg, #ffa17f, #3575ad)",
-    "GENETIC": "linear-gradient(90deg, #c21500, #ffc500)"
-}
+# Load the NER model (you can change to a different model if needed)
+nlp = spacy.load("en_core_web_sm")
 
 # Title of the Streamlit app
-st.title("Bio-NER using SpaCy NER Model")
+st.title("Bio-NER for PubMed Articles")
 
-# Instructions for the user
-st.write("Enter text below for Named Entity Recognition (NER) processing.")
+# Text input area for PubMed query
+query = st.text_input("Enter PubMed query:")
 
-# Text input area for the user to enter PubMed abstracts or other text
-text_input = st.text_area("Enter text for NER analysis:", height=200)
+# Button to fetch abstracts and run NER
+if st.button("Fetch and Analyze Abstracts"):
+    if query:
+        # Fetch the abstracts using your existing function
+        abstracts = fetch_abstracts(query)
 
-# Button to trigger the NER process
-if st.button("Analyze with NER"):
-    if text_input:
-        # Process the text with Spacy NER
-        doc = nlp(text_input)
+        # If abstracts are returned, process with NER
+        if abstracts:
+            st.write(f"Fetched {len(abstracts)} abstracts. Running NER analysis...")
 
-        # Render entities using displacy
-        entities_html = displacy.render(doc, style="ent", options={"colors": colors})
-
-        # Display the rendered HTML in Streamlit
-        st.markdown(entities_html, unsafe_allow_html=True)
-
-        # Optionally, list the entities in text form
-        entities = [(ent.text, ent.label_) for ent in doc.ents]
-        st.write("### Extracted Entities:")
-        st.write(entities)
+            # Process each abstract through the NER model
+            for abstract in abstracts:
+                doc = nlp(abstract)
+                st.write(f"### Abstract: {abstract}")
+                # Display named entities
+                for ent in doc.ents:
+                    st.write(f"- {ent.text} ({ent.label_})")
+        else:
+            st.warning("No abstracts found for the given query.")
     else:
-        st.warning("Please enter text to analyze.")
+        st.warning("Please enter a query.")
+
