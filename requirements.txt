@@ -1,6 +1,6 @@
 transformers>=4.5.0
-spacy>=3.0.6
-thinc==8.0.0
+spacy==3.0.6  # Pin to 3.0.6 or a compatible version
+thinc==8.0.3  # Use a compatible thinc version
 pysolr~=3.9.0
 flask==1.1.2
 flask-cors
@@ -10,9 +10,6 @@ streamlit
 jinja2==3.0.1
 markupsafe==2.0.1
 spacy-lookups-data
-cython  # Ensure Cython is installed for building C extensions
-# SpaCy model download for en_core_web_sm
+cython
+# Download SpaCy model version compatible with spacy==3.0.6
 https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.0.0/en_core_web_sm-3.0.0.tar.gz
-
-
-
