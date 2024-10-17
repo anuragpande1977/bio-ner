@@ -1,8 +1,8 @@
 import streamlit as st
 from transformers import pipeline
 
-# Load the NER pipeline using a biomedical NER model
-ner_pipeline = pipeline("ner", model="dmis-lab/biobert-base-cased-ner", grouped_entities=True)
+# Load the NER pipeline using a locally stored BioBERT model
+ner_pipeline = pipeline("ner", model="./biobert-model", grouped_entities=True)
 
 # Title of the app
 st.title("Bio-NER using BioBERT for Biomedical Entities")
@@ -32,4 +32,3 @@ if st.button("Analyze with NER"):
             st.write("No entities detected.")
     else:
         st.warning("Please enter text to analyze.")
-
