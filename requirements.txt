@@ -1,16 +1,5 @@
-transformers>=4.5.0
-spacy==3.5.0  # Use a more recent version of SpaCy that supports pre-built wheels
-thinc==8.1.7  # Version compatible with spacy 3.5.x
-pysolr~=3.9.0
-flask==1.1.2
-flask-cors
-Flask-Markdown
-torch>=1.7.1
 streamlit
-jinja2==3.0.1
-markupsafe==2.0.1
-spacy-lookups-data
-cython>=0.29.21  # Required for Cython-based extensions
-numpy>=1.19.5  # Pinning numpy to avoid issues with C-extension compatibility
-# SpaCy model download
+spacy==3.5.0
+thinc==8.1.7
+# Model download
 https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.5.0/en_core_web_sm-3.5.0.tar.gz
