@@ -1,9 +1,15 @@
 import streamlit as st
 import spacy
-from spacy import displacy
+import subprocess
 
-# Load the NER model (replace 'en_core_web_sm' with the model you need)
-nlp = spacy.load("en_core_web_sm")  # You can change this to your specific NER model
+# Ensure the SpaCy model is installed if not already
+try:
+    nlp = spacy.load("en_core_web_sm")
+except OSError:
+    subprocess.run(["python", "-m", "spacy", "download", "en_core_web_sm"])
+    nlp = spacy.load("en_core_web_sm")
+
+from spacy import displacy
 
 # Custom colors for visualization (if needed)
 colors = {
@@ -13,7 +19,7 @@ colors = {
 }
 
 # Title of the Streamlit app
-st.title("Bio-NER using Spacy NER Model")
+st.title("Bio-NER using SpaCy NER Model")
 
 # Instructions for the user
 st.write("Enter text below for Named Entity Recognition (NER) processing.")
