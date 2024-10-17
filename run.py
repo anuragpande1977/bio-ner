@@ -1,35 +1,24 @@
 import streamlit as st
-import spacy
-from pubmed_NER import fetch_abstracts  # Assuming this is your previous code for fetching abstracts
+from transformers import pipeline
 
-# Load the NER model (you can change to a different model if needed)
-nlp = spacy.load("en_core_web_sm")
+# Load the NER pipeline from Hugging Face
+ner_pipeline = pipeline("ner", grouped_entities=True)
 
-# Title of the Streamlit app
-st.title("Bio-NER for PubMed Articles")
+# Title of the app
+st.title("Bio-NER using Hugging Face Transformers")
 
-# Text input area for PubMed query
-query = st.text_input("Enter PubMed query:")
+# Input for PubMed abstracts or other text
+text_input = st.text_area("Enter text for NER analysis:", height=200)
 
-# Button to fetch abstracts and run NER
-if st.button("Fetch and Analyze Abstracts"):
-    if query:
-        # Fetch the abstracts using your existing function
-        abstracts = fetch_abstracts(query)
+# Button to trigger the NER process
+if st.button("Analyze with NER"):
+    if text_input:
+        # Run NER using Hugging Face pipeline
+        results = ner_pipeline(text_input)
 
-        # If abstracts are returned, process with NER
-        if abstracts:
-            st.write(f"Fetched {len(abstracts)} abstracts. Running NER analysis...")
-
-            # Process each abstract through the NER model
-            for abstract in abstracts:
-                doc = nlp(abstract)
-                st.write(f"### Abstract: {abstract}")
-                # Display named entities
-                for ent in doc.ents:
-                    st.write(f"- {ent.text} ({ent.label_})")
-        else:
-            st.warning("No abstracts found for the given query.")
+        # Display the results
+        st.write("### NER Results:")
+        for entity in results:
+            st.write(f"- {entity['word']}: {entity['entity_group']} (score: {entity['score']:.4f})")
     else:
-        st.warning("Please enter a query.")
-
+        st.warning("Please enter text to analyze.")
