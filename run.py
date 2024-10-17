@@ -1,38 +1,41 @@
 import streamlit as st
-import requests
-import json
+import spacy
+from spacy import displacy
+
+# Load the NER model (replace 'en_core_web_sm' with the model you need)
+nlp = spacy.load("en_core_web_sm")  # You can change this to your specific NER model
+
+# Custom colors for visualization (if needed)
+colors = {
+    "DISEASE": "linear-gradient(90deg, #aa9cfc, #fc9ce7)",
+    "CHEMICAL": "linear-gradient(90deg, #ffa17f, #3575ad)",
+    "GENETIC": "linear-gradient(90deg, #c21500, #ffc500)"
+}
 
 # Title of the Streamlit app
-st.title("Bio-NER using Flask API")
+st.title("Bio-NER using Spacy NER Model")
 
 # Instructions for the user
-st.write("Enter text below for Named Entity Recognition (NER) and processing using the Flask backend.")
+st.write("Enter text below for Named Entity Recognition (NER) processing.")
 
 # Text input area for the user to enter PubMed abstracts or other text
 text_input = st.text_area("Enter text for NER analysis:", height=200)
 
 # Button to trigger the NER process
 if st.button("Analyze with NER"):
-    if text_input:  # Check if there is text in the input field
-        # Prepare data to send to Flask API
-        data = {"text": text_input}
+    if text_input:
+        # Process the text with Spacy NER
+        doc = nlp(text_input)
 
-        try:
-            # Send the POST request to Flask API for NER
-            response = requests.post("http://localhost:5000/bio-ner/entities", json=data)
+        # Render entities using displacy
+        entities_html = displacy.render(doc, style="ent", options={"colors": colors})
 
-            if response.status_code == 200:
-                result = response.json()
+        # Display the rendered HTML in Streamlit
+        st.markdown(entities_html, unsafe_allow_html=True)
 
-                # Display entities and HTML rendering in Streamlit
-                st.write("### NER Results:")
-                st.write(result['entities'])  # The processed entities
-
-                # Render HTML (You can use st.markdown if you're getting HTML content from displaCy)
-                st.markdown(result['html'], unsafe_allow_html=True)
-            else:
-                st.error(f"Error: {response.status_code}")
-        except Exception as e:
-            st.error(f"An error occurred: {e}")
+        # Optionally, list the entities in text form
+        entities = [(ent.text, ent.label_) for ent in doc.ents]
+        st.write("### Extracted Entities:")
+        st.write(entities)
     else:
         st.warning("Please enter text to analyze.")
