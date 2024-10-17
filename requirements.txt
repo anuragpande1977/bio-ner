@@ -1,11 +1,11 @@
 transformers>=4.5.0
-spacy>=3
+spacy>=3.0.6  # Pinning to a compatible version
 pysolr~=3.9.0
-flask~=1.1.2
+flask==1.1.2  # Keeping Flask as is
 flask-cors
 Flask-Markdown
-torch
+torch>=1.7.1  # Ensure compatibility with transformers
 streamlit
-spacy
-jinja2
-markupsafe
+jinja2==3.0.1  # Pinning to a compatible version
+markupsafe==2.0.1  # Pinning to a compatible version
+
