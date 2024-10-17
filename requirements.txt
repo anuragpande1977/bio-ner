@@ -1,5 +1,6 @@
 transformers>=4.5.0
 spacy>=3.0.6
+thinc==8.0.0  # Pin thinc to a specific compatible version
 pysolr~=3.9.0
 flask==1.1.2
 flask-cors
@@ -11,4 +12,5 @@ markupsafe==2.0.1
 spacy-lookups-data
 # SpaCy model download for en_core_web_sm
 https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.0.0/en_core_web_sm-3.0.0.tar.gz
+
 
