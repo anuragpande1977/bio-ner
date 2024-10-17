@@ -1,5 +1,3 @@
 streamlit
-spacy==3.5.0
-thinc==8.1.7
-# Model download
-https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.5.0/en_core_web_sm-3.5.0.tar.gz
+transformers
+torch
