@@ -5,3 +5,7 @@ flask~=1.1.2
 flask-cors
 Flask-Markdown
 torch
+streamlit
+spacy
+jinja2
+markupsafe
